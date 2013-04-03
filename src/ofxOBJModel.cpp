@@ -29,7 +29,7 @@ void ofxOBJModel::flipNormals() {
 
 }
 
-bool ofxOBJModel::load(string path) {
+bool ofxOBJModel::load(string path, bool objectsAsGroups) {
 	filePath = path;
 	path = ofToDataPath(path, true);
 
@@ -92,7 +92,7 @@ bool ofxOBJModel::load(string path) {
 
 		string nextName = "";
 		for(int i = 0; i < defs.size(); i++) {
-			if(defs[i].find("g ")==0) {
+			if(defs[i].find("g ") == 0 || (defs[i].find("o ") == 0 && objectsAsGroups)) {
 				groups.push_back(ofxOBJGroup(defs[i].substr(2)));
 			} else if(defs[i].find("o ")==0) {
 				nextName = defs[i].substr(2);

@@ -36,7 +36,7 @@ public:
 	/**
 	 * load an obj file, put in the data/ dir.
 	 */
-	bool load(string path);
+	bool load(string path, bool objectsAsGroups = false);
 	
 	
 	/**
