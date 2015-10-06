@@ -11,12 +11,13 @@
 
 #include "ofxOBJFace.h"
 
-class ofxOBJGroup {
+template <class FaceClass>
+class _ofxOBJGroup {
 public:
-	vector<ofxOBJFace> faces;
+	vector<FaceClass> faces;
 	string name;
 	
-	ofxOBJGroup(string name = "untitled");
+	_ofxOBJGroup(string name = "untitled");
 	
 	void addFace(ofxOBJFace face);
 	
@@ -60,3 +61,4 @@ private:
 };
 
 
+typedef _ofxOBJGroup<ofxOBJFace> ofxOBJGroup;
