@@ -17,7 +17,7 @@
 #pragma mark ofxOBJModel
 
 template<class GroupClass>
-_ofxOBJModel<GroupClass>::_ofxOBJModel() {
+_ofxOBJModel<GroupClass>::_ofxOBJModel(): meshDirty(true) {
     
     
 }
@@ -398,6 +398,10 @@ ofxOBJGroup *_ofxOBJModel<GroupClass>::getGroup(string name) {
 
 template<class GroupClass>
 ofVboMesh *_ofxOBJModel<GroupClass>::getVboMesh() {
+    if (meshDirty) {
+        createMesh();
+        meshDirty = false;
+    }
 	return &mesh;
 }
 

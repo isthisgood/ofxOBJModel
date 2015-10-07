@@ -95,6 +95,9 @@ private:
 
 	ofVec3f parseCoords(string line);
 	string filePath;
+    
+protected:
+    bool meshDirty;
 };
 
 typedef _ofxOBJModel<ofxOBJGroup> ofxOBJModel;
