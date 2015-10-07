@@ -4,6 +4,8 @@
 
 #include "ofxOBJModel.h"
 
+#include "ofxPhysicalOBJModel.h"
+
 class ofApp : public ofBaseApp {
 public:
     void setup();
@@ -19,5 +21,11 @@ public:
     void windowResized(int w, int h);
 
     ofEasyCam cam;
-    ofxOBJModel model;
+//    ofxOBJModel model;
+    ofxPhysicalOBJModel model;
+    ofImage modelTexture;
+    
+    bool startExplosion;
+    int explosionForce;
+    bool useTexture;
 };
