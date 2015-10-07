@@ -19,7 +19,7 @@ public:
 	
 	_ofxOBJGroup(string name = "untitled");
 	
-	void addFace(ofxOBJFace face);
+	void addFace(FaceClass face);
 	
 	void getBounds(ofVec3f &minPoint, ofVec3f &maxPoint);
 	
@@ -56,8 +56,10 @@ public:
 	
 	void flipNormals();
 	
+    typedef FaceClass faceClass;
+    
 private:
-	ofxOBJFace createTriFromPoly(const ofxOBJFace &poly, int offset);
+	FaceClass createTriFromPoly(const FaceClass &poly, int offset);
 };
 
 

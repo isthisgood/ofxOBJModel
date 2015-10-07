@@ -92,10 +92,11 @@ bool _ofxOBJModel<GroupClass>::load(string path, bool objectsAsGroups) {
 
 		myfile.close();
 
+        
 		string nextName = "";
 		for(int i = 0; i < defs.size(); i++) {
 			if(defs[i].find("g ") == 0 || (defs[i].find("o ") == 0 && objectsAsGroups)) {
-				groups.push_back(ofxOBJGroup(defs[i].substr(2)));
+				groups.push_back(GroupClass(defs[i].substr(2)));
 			} else if(defs[i].find("o ")==0) {
 				nextName = defs[i].substr(2);
 				
@@ -105,7 +106,7 @@ bool _ofxOBJModel<GroupClass>::load(string path, bool objectsAsGroups) {
 				}
 				
 			} else if(defs[i].find("f ")==0) {
-				groups.back().faces.push_back(ofxOBJFace(nextName));
+                groups.back().faces.push_back(typename GroupClass::faceClass(nextName));
 				parseFace(groups.back().faces.back(), defs[i], vertices, normals, texCoords);
 				nextName = "";
 			}
@@ -117,7 +118,7 @@ bool _ofxOBJModel<GroupClass>::load(string path, bool objectsAsGroups) {
 			numFaces += groups[i].faces.size();
 		}
 
-		printf("Successfully loaded %s\n-----\nVertices: %d\nGroups: %d\nNormals: %d\nTexCoords: %d\nFaces: %d\n----\n",
+		printf("Successfully loaded %s\n-----\nVertices: %lu\nGroups: %lu\nNormals: %lu\nTexCoords: %lu\nFaces: %d\n----\n",
 					path.c_str(), vertices.size()-1, groups.size(), normals.size()-1, texCoords.size()-1, numFaces);
 
 
@@ -139,7 +140,7 @@ void _ofxOBJModel<GroupClass>::clear() {
 }
 
 template<class GroupClass>
-void _ofxOBJModel<GroupClass>::addGroup(ofxOBJGroup group) {
+void _ofxOBJModel<GroupClass>::addGroup(GroupClass group) {
 	groups.push_back(group);
 	createMesh();
 }
@@ -149,7 +150,7 @@ void _ofxOBJModel<GroupClass>::triangulateQuads() {
 	
 	
 	for(int i = 0; i < groups.size(); i++) {
-		ofxOBJGroup *group = &groups[i];
+		GroupClass *group = &groups[i];
 		group->triangulateQuads();
 	}
 	createMesh();
@@ -236,7 +237,7 @@ bool _ofxOBJModel<GroupClass>::save(string file) {
 	string n = "\r\n";
 	for(int i = 0; i < groups.size(); i++) {
 
-		ofxOBJGroup *group = &groups[i];
+		GroupClass *group = &groups[i];
 
 		contents += n + n + "g " + groups[i].name + n;
 
@@ -386,7 +387,7 @@ void _ofxOBJModel<GroupClass>::getBounds(ofVec3f &minPoint, ofVec3f &maxPoint) {
 }
 
 template<class GroupClass>
-ofxOBJGroup *_ofxOBJModel<GroupClass>::getGroup(string name) {
+GroupClass *_ofxOBJModel<GroupClass>::getGroup(string name) {
 	for(int i = 0; i < groups.size(); i++) {
 		if(groups[i].name==name) {
 			return &groups[i];
@@ -412,7 +413,7 @@ void _ofxOBJModel<GroupClass>::createMesh() {
 
 	mesh.setUsage(GL_STATIC_DRAW);
 	for(int i = 0; i < groups.size(); i++) {
-		ofxOBJGroup *group = &groups[i];
+		GroupClass *group = &groups[i];
 		for(int j = 0; j < group->faces.size(); j++) {
 			ofxOBJFace *face = &group->faces[j];
 			bool doingNormals = face->normals.size()==face->vertices.size();
@@ -456,6 +457,8 @@ ofRectangle _ofxOBJModel<GroupClass>::getTexCoordBounds() {
 
 template class _ofxOBJModel<ofxOBJGroup>;
 
+#include "ofxPhysicalOBJModel.h"
+template class _ofxOBJModel<ofxPhysicalOBJGroup>;
 
 
 

@@ -32,7 +32,7 @@ public:
 	/**
 	 * Accessible array of groups in the OBJ file.
 	 */
-	vector<ofxOBJGroup> groups;
+	vector<GroupClass> groups;
 
 	/**
 	 * load an obj file, put in the data/ dir.
@@ -58,7 +58,7 @@ public:
 
 	void clear();
 	
-	void addGroup(ofxOBJGroup group);
+	void addGroup(GroupClass group);
 	
 	
 	
@@ -79,7 +79,7 @@ public:
 
 	ofVboMesh *getVboMesh();
 
-	ofxOBJGroup *getGroup(string name);
+	GroupClass *getGroup(string name);
 
 	vector<string> getGroupNames();
 	

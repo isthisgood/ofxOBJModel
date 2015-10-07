@@ -20,7 +20,7 @@ _ofxOBJGroup<FaceClass>::_ofxOBJGroup(string name) {
 
 
 template <class FaceClass>
-void _ofxOBJGroup<FaceClass>::addFace(ofxOBJFace face) {
+void _ofxOBJGroup<FaceClass>::addFace(FaceClass face) {
 	faces.push_back(face);
 }
 
@@ -32,8 +32,8 @@ void _ofxOBJGroup<FaceClass>::draw(bool drawSolid) {
 }
 
 template <class FaceClass>
-ofxOBJFace _ofxOBJGroup<FaceClass>::createTriFromPoly(const ofxOBJFace &poly, int offset) {
-	ofxOBJFace face;
+FaceClass _ofxOBJGroup<FaceClass>::createTriFromPoly(const FaceClass &poly, int offset) {
+	FaceClass face;
 	for(int i = offset; i < offset + 3; i++) {
 		int index = i % poly.vertices.size();
 		face.addVertex(poly.vertices[index]);
@@ -46,7 +46,7 @@ ofxOBJFace _ofxOBJGroup<FaceClass>::createTriFromPoly(const ofxOBJFace &poly, in
 
 template <class FaceClass>
 void _ofxOBJGroup<FaceClass>::triangulateQuads() {
-	vector<ofxOBJFace> newFaces;
+	vector<FaceClass> newFaces;
 	for(int i = 0; i < faces.size(); i++) {
 		if(faces[i].vertices.size()==4) {
 			
@@ -215,3 +215,6 @@ void _ofxOBJGroup<FaceClass>::flipNormals() {
 }
 
 template class _ofxOBJGroup<ofxOBJFace>;
+
+#include "ofxPhysicalOBJModel.h"
+template class _ofxOBJGroup<ofxPhysicalOBJFace>;
