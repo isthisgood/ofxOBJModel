@@ -29,7 +29,6 @@
 		EE8510861BC3F2BA00779C25 /* ofxOBJFace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EE8510801BC3F2BA00779C25 /* ofxOBJFace.cpp */; };
 		EE8510871BC3F2BA00779C25 /* ofxOBJGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EE8510821BC3F2BA00779C25 /* ofxOBJGroup.cpp */; };
 		EE8510881BC3F2BA00779C25 /* ofxOBJModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EE8510841BC3F2BA00779C25 /* ofxOBJModel.cpp */; };
-		EE8510A61BC51F9000779C25 /* ofxPhysicalOBJModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EE8510A41BC51F9000779C25 /* ofxPhysicalOBJModel.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,8 +91,6 @@
 		EE8510831BC3F2BA00779C25 /* ofxOBJGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOBJGroup.h; sourceTree = "<group>"; };
 		EE8510841BC3F2BA00779C25 /* ofxOBJModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOBJModel.cpp; sourceTree = "<group>"; };
 		EE8510851BC3F2BA00779C25 /* ofxOBJModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOBJModel.h; sourceTree = "<group>"; };
-		EE8510A41BC51F9000779C25 /* ofxPhysicalOBJModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPhysicalOBJModel.cpp; sourceTree = "<group>"; };
-		EE8510A51BC51F9000779C25 /* ofxPhysicalOBJModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPhysicalOBJModel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,8 +215,6 @@
 				EE8510831BC3F2BA00779C25 /* ofxOBJGroup.h */,
 				EE8510841BC3F2BA00779C25 /* ofxOBJModel.cpp */,
 				EE8510851BC3F2BA00779C25 /* ofxOBJModel.h */,
-				EE8510A41BC51F9000779C25 /* ofxPhysicalOBJModel.cpp */,
-				EE8510A51BC51F9000779C25 /* ofxPhysicalOBJModel.h */,
 			);
 			name = src;
 			path = ../src;
@@ -324,7 +319,6 @@
 				EE8510871BC3F2BA00779C25 /* ofxOBJGroup.cpp in Sources */,
 				EE8510881BC3F2BA00779C25 /* ofxOBJModel.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
-				EE8510A61BC51F9000779C25 /* ofxPhysicalOBJModel.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
