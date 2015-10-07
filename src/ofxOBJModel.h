@@ -86,6 +86,8 @@ public:
 	void flipNormals();
 	
 	ofRectangle getTexCoordBounds();
+    ofVec3f modelCenter;
+    
 private:
 
 	void parseFace(ofxOBJFace &face, const string &def, const vector<ofVec3f> &vertices,

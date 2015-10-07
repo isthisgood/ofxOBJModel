@@ -41,8 +41,6 @@ public:
     static const ofVec3f MODEL_CENTER;
     void explodeMesh(float amount=10.0, ofVec3f fromPoint=ofxPhysicalOBJModel::MODEL_CENTER);
     
-    ofVec3f modelCenter;
-    
     void reset();
     void update();
     

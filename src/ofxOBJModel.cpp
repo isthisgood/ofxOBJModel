@@ -117,6 +117,12 @@ bool _ofxOBJModel<GroupClass>::load(string path, bool objectsAsGroups) {
 		for(int i = 0; i < groups.size(); i++) {
 			numFaces += groups[i].faces.size();
 		}
+        
+        ofVec3f sum;
+        for (auto vert : vertices) {
+            sum+= vert;
+        }
+        modelCenter = sum / vertices.size();
 
 		printf("Successfully loaded %s\n-----\nVertices: %lu\nGroups: %lu\nNormals: %lu\nTexCoords: %lu\nFaces: %d\n----\n",
 					path.c_str(), vertices.size()-1, groups.size(), normals.size()-1, texCoords.size()-1, numFaces);
