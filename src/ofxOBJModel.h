@@ -24,10 +24,11 @@
 #include "ofMain.h"
 #include "ofxOBJGroup.h"
 
-class ofxOBJModel {
+template<class GroupClass>
+class _ofxOBJModel {
 public:
 
-	ofxOBJModel();
+	_ofxOBJModel();
 	/**
 	 * Accessible array of groups in the OBJ file.
 	 */
@@ -96,5 +97,5 @@ private:
 	string filePath;
 };
 
-
+typedef _ofxOBJModel<ofxOBJGroup> ofxOBJModel;
 
