@@ -11,14 +11,15 @@
 
 #include "ofxOBJFace.h"
 
-class ofxOBJGroup {
+template <class FaceClass>
+class _ofxOBJGroup {
 public:
-	vector<ofxOBJFace> faces;
+	vector<FaceClass> faces;
 	string name;
 	
-	ofxOBJGroup(string name = "untitled");
+	_ofxOBJGroup(string name = "untitled");
 	
-	void addFace(ofxOBJFace face);
+	void addFace(FaceClass face);
 	
 	void getBounds(ofVec3f &minPoint, ofVec3f &maxPoint);
 	
@@ -55,8 +56,11 @@ public:
 	
 	void flipNormals();
 	
+    typedef FaceClass faceClass;
+    
 private:
-	ofxOBJFace createTriFromPoly(const ofxOBJFace &poly, int offset);
+	FaceClass createTriFromPoly(const FaceClass &poly, int offset);
 };
 
 
+typedef _ofxOBJGroup<ofxOBJFace> ofxOBJGroup;

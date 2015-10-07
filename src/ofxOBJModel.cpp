@@ -14,22 +14,24 @@
 	#include <float.h>
 #endif
 
-
-
 #pragma mark ofxOBJModel
 
-ofxOBJModel::ofxOBJModel() {
-
+template<class GroupClass>
+_ofxOBJModel<GroupClass>::_ofxOBJModel(): meshDirty(true) {
+    
+    
 }
 
-void ofxOBJModel::flipNormals() {
+template<class GroupClass>
+void _ofxOBJModel<GroupClass>::flipNormals() {
 	for(int i = 0; i < groups.size(); i++) {
 		groups[i].flipNormals();
 	}
 
 }
 
-bool ofxOBJModel::load(string path, bool objectsAsGroups) {
+template<class GroupClass>
+bool _ofxOBJModel<GroupClass>::load(string path, bool objectsAsGroups) {
 	filePath = path;
 	path = ofToDataPath(path, true);
 
@@ -90,10 +92,11 @@ bool ofxOBJModel::load(string path, bool objectsAsGroups) {
 
 		myfile.close();
 
+        
 		string nextName = "";
 		for(int i = 0; i < defs.size(); i++) {
 			if(defs[i].find("g ") == 0 || (defs[i].find("o ") == 0 && objectsAsGroups)) {
-				groups.push_back(ofxOBJGroup(defs[i].substr(2)));
+				groups.push_back(GroupClass(defs[i].substr(2)));
 			} else if(defs[i].find("o ")==0) {
 				nextName = defs[i].substr(2);
 				
@@ -103,22 +106,25 @@ bool ofxOBJModel::load(string path, bool objectsAsGroups) {
 				}
 				
 			} else if(defs[i].find("f ")==0) {
-				groups.back().faces.push_back(ofxOBJFace(nextName));
+                groups.back().faces.push_back(typename GroupClass::faceClass(nextName));
 				parseFace(groups.back().faces.back(), defs[i], vertices, normals, texCoords);
 				nextName = "";
 			}
 		}
 
 
-
-
-
 		int numFaces = 0;
 		for(int i = 0; i < groups.size(); i++) {
 			numFaces += groups[i].faces.size();
 		}
+        
+        ofVec3f sum;
+        for (auto vert : vertices) {
+            sum+= vert;
+        }
+        modelCenter = sum / vertices.size();
 
-		printf("Successfully loaded %s\n-----\nVertices: %d\nGroups: %d\nNormals: %d\nTexCoords: %d\nFaces: %d\n----\n",
+		printf("Successfully loaded %s\n-----\nVertices: %lu\nGroups: %lu\nNormals: %lu\nTexCoords: %lu\nFaces: %d\n----\n",
 					path.c_str(), vertices.size()-1, groups.size(), normals.size()-1, texCoords.size()-1, numFaces);
 
 
@@ -132,25 +138,32 @@ bool ofxOBJModel::load(string path, bool objectsAsGroups) {
 		return false;
 	}
 }
-void ofxOBJModel::clear() {
+
+template<class GroupClass>
+void _ofxOBJModel<GroupClass>::clear() {
 	groups.clear();
 	createMesh();
 }
 
-void ofxOBJModel::addGroup(ofxOBJGroup group) {
+template<class GroupClass>
+void _ofxOBJModel<GroupClass>::addGroup(GroupClass group) {
 	groups.push_back(group);
 	createMesh();
 }
-void ofxOBJModel::triangulateQuads() {
+
+template<class GroupClass>
+void _ofxOBJModel<GroupClass>::triangulateQuads() {
 	
 	
 	for(int i = 0; i < groups.size(); i++) {
-		ofxOBJGroup *group = &groups[i];
+		GroupClass *group = &groups[i];
 		group->triangulateQuads();
 	}
 	createMesh();
 }
-void ofxOBJModel::swapYZ() {
+
+template<class GroupClass>
+void _ofxOBJModel<GroupClass>::swapYZ() {
     for(int i = 0; i < groups.size(); i++) {
         for(int j = 0; j < groups[i].faces.size(); j++) {
             groups[i].faces[j].swapYZ();
@@ -158,7 +171,9 @@ void ofxOBJModel::swapYZ() {
     }
     createMesh();
 }
-void ofxOBJModel::scale(float factor) {
+
+template<class GroupClass>
+void _ofxOBJModel<GroupClass>::scale(float factor) {
     for(int i = 0; i < groups.size(); i++) {
         for(int j = 0; j < groups[i].faces.size(); j++) {
             groups[i].faces[j].scale(factor);
@@ -167,7 +182,8 @@ void ofxOBJModel::scale(float factor) {
     createMesh();
 }
 
-void ofxOBJModel::createFlatProjectionTexCoords() {
+template<class GroupClass>
+void _ofxOBJModel<GroupClass>::createFlatProjectionTexCoords() {
     ofVec3f min, max;
     getBounds(min, max);
     ofRectangle rect(min.x, min.y, max.x-min.x, max.y-min.y);
@@ -179,7 +195,9 @@ void ofxOBJModel::createFlatProjectionTexCoords() {
    // swapYZ();
     createMesh();
 }
-void ofxOBJModel::parseFace(ofxOBJFace &face, const string &def, const vector<ofVec3f> &vertices,
+
+template<class GroupClass>
+void _ofxOBJModel<GroupClass>::parseFace(ofxOBJFace &face, const string &def, const vector<ofVec3f> &vertices,
 			   const vector<ofVec3f> &normals, const vector<ofVec2f> &texCoords) {
 
 	// these are the possible options in an obj
@@ -209,7 +227,9 @@ void ofxOBJModel::parseFace(ofxOBJFace &face, const string &def, const vector<of
 	}
 
 }
-bool ofxOBJModel::save(string file) {
+
+template<class GroupClass>
+bool _ofxOBJModel<GroupClass>::save(string file) {
 	if(file=="") {
 		file = filePath;
 		if(filePath=="") {
@@ -217,13 +237,13 @@ bool ofxOBJModel::save(string file) {
 		}
 	}
 	file = ofToDataPath(file, true);
-	string contents = "# ofxOBJModel output\r\n\r\n";
+	string contents = "# _ofxOBJModel<GroupClass> output\r\n\r\n";
 	int vertexIndex = 1;
 	string faceStrings = "";
 	string n = "\r\n";
 	for(int i = 0; i < groups.size(); i++) {
 
-		ofxOBJGroup *group = &groups[i];
+		GroupClass *group = &groups[i];
 
 		contents += n + n + "g " + groups[i].name + n;
 
@@ -317,8 +337,8 @@ bool ofxOBJModel::save(string file) {
 
 }
 
-
-ofVec3f ofxOBJModel::parseCoords(string line) {
+template<class GroupClass>
+ofVec3f _ofxOBJModel<GroupClass>::parseCoords(string line) {
 	ofVec3f p;
 	line = line.substr(line.find(" ")+1);
 	vector<string> elements = ofSplitString(line, " ");
@@ -335,17 +355,16 @@ ofVec3f ofxOBJModel::parseCoords(string line) {
 	return p;
 }
 
-
-
-void ofxOBJModel::draw(bool drawSolid) {
+template<class GroupClass>
+void _ofxOBJModel<GroupClass>::draw(bool drawSolid) {
 	for(int i = 0; i < groups.size(); i++) {
 		groups[i].draw(drawSolid);
 	}
 }
 
 
-
-vector<string> ofxOBJModel::getGroupNames() {
+template<class GroupClass>
+vector<string> _ofxOBJModel<GroupClass>::getGroupNames() {
 	vector<string> groupNames;
 	for(int i = 0; i < groups.size(); i++) {
 		groupNames.push_back(groups[i].name);
@@ -353,7 +372,8 @@ vector<string> ofxOBJModel::getGroupNames() {
 	return groupNames;
 }
 
-void ofxOBJModel::getBounds(ofVec3f &minPoint, ofVec3f &maxPoint) {
+template<class GroupClass>
+void _ofxOBJModel<GroupClass>::getBounds(ofVec3f &minPoint, ofVec3f &maxPoint) {
 	minPoint.x = minPoint.y = minPoint.z = FLT_MAX;
 	maxPoint.x = maxPoint.y = maxPoint.z = FLT_MIN;
 
@@ -372,8 +392,8 @@ void ofxOBJModel::getBounds(ofVec3f &minPoint, ofVec3f &maxPoint) {
 
 }
 
-
-ofxOBJGroup *ofxOBJModel::getGroup(string name) {
+template<class GroupClass>
+GroupClass *_ofxOBJModel<GroupClass>::getGroup(string name) {
 	for(int i = 0; i < groups.size(); i++) {
 		if(groups[i].name==name) {
 			return &groups[i];
@@ -383,17 +403,23 @@ ofxOBJGroup *ofxOBJModel::getGroup(string name) {
 	return NULL;
 }
 
-ofVboMesh *ofxOBJModel::getVboMesh() {
+template<class GroupClass>
+ofVboMesh *_ofxOBJModel<GroupClass>::getVboMesh() {
+    if (meshDirty) {
+        createMesh();
+        meshDirty = false;
+    }
 	return &mesh;
 }
 
-void ofxOBJModel::createMesh() {
+template<class GroupClass>
+void _ofxOBJModel<GroupClass>::createMesh() {
 
 	mesh.clear();
 
 	mesh.setUsage(GL_STATIC_DRAW);
 	for(int i = 0; i < groups.size(); i++) {
-		ofxOBJGroup *group = &groups[i];
+		GroupClass *group = &groups[i];
 		for(int j = 0; j < group->faces.size(); j++) {
 			ofxOBJFace *face = &group->faces[j];
 			bool doingNormals = face->normals.size()==face->vertices.size();
@@ -411,10 +437,11 @@ void ofxOBJModel::createMesh() {
 			}
 		}
 	}
+    
 }
 
-
-ofRectangle ofxOBJModel::getTexCoordBounds() {
+template<class GroupClass>
+ofRectangle _ofxOBJModel<GroupClass>::getTexCoordBounds() {
 	bool started = false;
 	ofRectangle r;
 	for(int i = 0; i < groups.size(); i++) {
@@ -434,15 +461,10 @@ ofRectangle ofxOBJModel::getTexCoordBounds() {
 }
 
 
+template class _ofxOBJModel<ofxOBJGroup>;
 
-
-
-
-
-
-
-
-
+#include "ofxPhysicalOBJModel.h"
+template class _ofxOBJModel<ofxPhysicalOBJGroup>;
 
 
 

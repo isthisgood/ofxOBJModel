@@ -24,14 +24,15 @@
 #include "ofMain.h"
 #include "ofxOBJGroup.h"
 
-class ofxOBJModel {
+template<class GroupClass>
+class _ofxOBJModel {
 public:
 
-	ofxOBJModel();
+	_ofxOBJModel();
 	/**
 	 * Accessible array of groups in the OBJ file.
 	 */
-	vector<ofxOBJGroup> groups;
+	vector<GroupClass> groups;
 
 	/**
 	 * load an obj file, put in the data/ dir.
@@ -57,7 +58,7 @@ public:
 
 	void clear();
 	
-	void addGroup(ofxOBJGroup group);
+	void addGroup(GroupClass group);
 	
 	
 	
@@ -78,13 +79,15 @@ public:
 
 	ofVboMesh *getVboMesh();
 
-	ofxOBJGroup *getGroup(string name);
+	GroupClass *getGroup(string name);
 
 	vector<string> getGroupNames();
 	
 	void flipNormals();
 	
 	ofRectangle getTexCoordBounds();
+    ofVec3f modelCenter;
+    
 private:
 
 	void parseFace(ofxOBJFace &face, const string &def, const vector<ofVec3f> &vertices,
@@ -94,7 +97,10 @@ private:
 
 	ofVec3f parseCoords(string line);
 	string filePath;
+    
+protected:
+    bool meshDirty;
 };
 
-
+typedef _ofxOBJModel<ofxOBJGroup> ofxOBJModel;
 
