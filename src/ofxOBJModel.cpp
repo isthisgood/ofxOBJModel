@@ -463,8 +463,5 @@ ofRectangle _ofxOBJModel<GroupClass>::getTexCoordBounds() {
 
 template class _ofxOBJModel<ofxOBJGroup>;
 
-#include "ofxPhysicalOBJModel.h"
-template class _ofxOBJModel<ofxPhysicalOBJGroup>;
-
 
 

@@ -215,6 +215,3 @@ void _ofxOBJGroup<FaceClass>::flipNormals() {
 }
 
 template class _ofxOBJGroup<ofxOBJFace>;
-
-#include "ofxPhysicalOBJModel.h"
-template class _ofxOBJGroup<ofxPhysicalOBJFace>;
